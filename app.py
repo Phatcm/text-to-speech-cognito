@@ -2,12 +2,12 @@ import streamlit as st
 import requests
 
 def media_player(url):
-    html = """
-        <audio controls>
-            <source src=%s type="audio/mpeg">
+    html = f"""
+        <audio controls style="width: 100%;">
+            <source src={url} type="audio/mpeg">
             Your browser does not support the audio element.
         </audio>
-    """ % (url)
+    """
     st.markdown(html, unsafe_allow_html=True)
     
 def app():
@@ -21,6 +21,7 @@ def app():
         if response.status_code == 200:
             audio_url = response.text  # Assuming the response.text contains the audio URL
             media_player(audio_url)
+
         else:
             st.write("Error")
             st.write(response.text)
