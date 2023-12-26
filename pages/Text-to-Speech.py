@@ -1,5 +1,6 @@
 import streamlit as st
 import requests
+import components.authenticate as authenticate
 
 def media_player(url):
     html = f"""
@@ -9,8 +10,18 @@ def media_player(url):
         </audio>
     """
     st.markdown(html, unsafe_allow_html=True)
-    
-def app():
+
+
+# Check authentication
+authenticate.set_st_state_vars()
+
+# Add login/logout buttons
+if st.session_state["authenticated"]:
+    authenticate.button_logout()
+else:
+    authenticate.button_login()
+
+if (st.session_state["authenticated"]):   
     st.markdown("<h1 style='text-align: center; color: red;'>My talking app</h1>", unsafe_allow_html=True)
     text = st.text_area("Input your text")
     st.write(f'You wrote {len(text)} characters.')
@@ -25,5 +36,10 @@ def app():
         else:
             st.write("Error")
             st.write(response.text)
-app()
+            
+else:
+    if st.session_state["authenticated"]:
+        st.write("You do not have access. Please contact the administrator.")
+    else:
+        st.write("Please login!")
 
